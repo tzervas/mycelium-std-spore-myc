@@ -1,0 +1,103 @@
+{
+  "records": [
+    {
+      "myc_file": "/tmp/myc-decompose/work/mycelium-std-spore-myc/experiments/vet/deploy.myc",
+      "source_file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/deploy.rs",
+      "class": "Clean",
+      "exit_code": 0,
+      "diagnostic": "",
+      "non_test_items": 11,
+      "emitted_items": 5
+    },
+    {
+      "myc_file": "/tmp/myc-decompose/work/mycelium-std-spore-myc/experiments/vet/guarantee_matrix.myc",
+      "source_file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/guarantee_matrix.rs",
+      "class": "Clean",
+      "exit_code": 0,
+      "diagnostic": "",
+      "non_test_items": 3,
+      "emitted_items": 0
+    },
+    {
+      "myc_file": "/tmp/myc-decompose/work/mycelium-std-spore-myc/experiments/vet/lib.myc",
+      "source_file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "class": "Clean",
+      "exit_code": 0,
+      "diagnostic": "",
+      "non_test_items": 6,
+      "emitted_items": 2
+    },
+    {
+      "myc_file": "/tmp/myc-decompose/work/mycelium-std-spore-myc/experiments/vet/recon_manifest.myc",
+      "source_file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/recon_manifest.rs",
+      "class": "Clean",
+      "exit_code": 0,
+      "diagnostic": "",
+      "non_test_items": 13,
+      "emitted_items": 1
+    },
+    {
+      "myc_file": "/tmp/myc-decompose/work/mycelium-std-spore-myc/experiments/vet/spore_ops.myc",
+      "source_file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/spore_ops.rs",
+      "class": "Clean",
+      "exit_code": 0,
+      "diagnostic": "",
+      "non_test_items": 15,
+      "emitted_items": 0
+    }
+  ],
+  "total_non_test_items": 48,
+  "total_emitted_items": 8,
+  "total_checked_clean_items": 8,
+  "class_counts": {
+    "Clean": 5
+  },
+  "phylum": {
+    "ran": true,
+    "ok": true,
+    "nodules": [
+      {
+        "nodule": "std.spore_kw.deploy",
+        "file": "deploy.myc",
+        "class": "Clean",
+        "site": null,
+        "on": null,
+        "message": null
+      },
+      {
+        "nodule": "std.spore_kw.guarantee_matrix",
+        "file": "guarantee_matrix.myc",
+        "class": "Clean",
+        "site": null,
+        "on": null,
+        "message": null
+      },
+      {
+        "nodule": "std.spore_kw",
+        "file": "lib.myc",
+        "class": "Clean",
+        "site": null,
+        "on": null,
+        "message": null
+      },
+      {
+        "nodule": "std.spore_kw.recon_manifest",
+        "file": "recon_manifest.myc",
+        "class": "Clean",
+        "site": null,
+        "on": null,
+        "message": null
+      },
+      {
+        "nodule": "std.spore_kw.spore_ops",
+        "file": "spore_ops.myc",
+        "class": "Clean",
+        "site": null,
+        "on": null,
+        "message": null
+      }
+    ],
+    "diagnostic": ""
+  },
+  "total_checked_clean_items_phylum": 8
+}

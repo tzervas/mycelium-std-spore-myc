@@ -1,0 +1,170 @@
+{
+  "source": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+  "emitted_items": [
+    "co-include:DeployError,DeployTarget,DeployVerification",
+    "co-include:MalformedManifest"
+  ],
+  "gaps": [
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 1,
+      "col": 1,
+      "category": "ReservedWord",
+      "rust_construct": "ReservedWord",
+      "snippet": "nodule std.spore;",
+      "reason": "derived nodule path `std.spore` has segment(s) [spore] colliding with a Mycelium reserved word — emitting them verbatim would fail to parse (`nodule std.spore;` tokenizes the colliding word as a keyword, not an identifier); each colliding segment is escaped with the `_kw` suffix (now `std.spore_kw`) rather than dropped, so distinct source files whose only differing segment is a reserved word (e.g. `l1.fuse` vs `l1.nodule`) stay distinguishable instead of both collapsing onto the same nodule path (G2/VR-5)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 1,
+      "col": 1,
+      "category": "InnerAttr",
+      "rust_construct": "InnerAttr",
+      "snippet": "# ! [forbid (unsafe_code)]",
+      "reason": "crate/file-level inner attributes (#![...]) are not transpiled (no nodule-header equivalent for these Rust-specific directives)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 79,
+      "col": 1,
+      "category": "ModuleDecl",
+      "rust_construct": "ModuleDecl",
+      "snippet": "pub mod deploy ;",
+      "reason": "external `mod foo;` declaration — file-linkage, not translatable library surface (Mycelium's nodule-per-file model makes the module tree implicit in the file layout; the sibling file transpiles as its own nodule). Excluded from the expressible-fraction denominator, recorded not dropped",
+      "item_name": "deploy"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 80,
+      "col": 1,
+      "category": "ModuleDecl",
+      "rust_construct": "ModuleDecl",
+      "snippet": "pub mod guarantee_matrix ;",
+      "reason": "external `mod foo;` declaration — file-linkage, not translatable library surface (Mycelium's nodule-per-file model makes the module tree implicit in the file layout; the sibling file transpiles as its own nodule). Excluded from the expressible-fraction denominator, recorded not dropped",
+      "item_name": "guarantee_matrix"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 81,
+      "col": 1,
+      "category": "ModuleDecl",
+      "rust_construct": "ModuleDecl",
+      "snippet": "pub mod recon_manifest ;",
+      "reason": "external `mod foo;` declaration — file-linkage, not translatable library surface (Mycelium's nodule-per-file model makes the module tree implicit in the file layout; the sibling file transpiles as its own nodule). Excluded from the expressible-fraction denominator, recorded not dropped",
+      "item_name": "recon_manifest"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 82,
+      "col": 1,
+      "category": "ModuleDecl",
+      "rust_construct": "ModuleDecl",
+      "snippet": "pub mod spore_ops ;",
+      "reason": "external `mod foo;` declaration — file-linkage, not translatable library surface (Mycelium's nodule-per-file model makes the module tree implicit in the file layout; the sibling file transpiles as its own nodule). Excluded from the expressible-fraction denominator, recorded not dropped",
+      "item_name": "spore_ops"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 85,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "pub use mycelium_core :: { ContentHash , GuaranteeStrength } ;",
+      "reason": "`use mycelium_core::ContentHash` — `mycelium_core` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2); `use mycelium_core::GuaranteeStrength` — `mycelium_core` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 86,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "pub use mycelium_spore :: { Spore as RawSpore , SporeError } ;",
+      "reason": "`use mycelium_spore::Spore as RawSpore` — a renamed cross-nodule import is out of this increment's scope (the alias would need threading through every downstream reference to `RawSpore` in this file's body); flagged, not guessed (VR-5/G2); `use mycelium_spore::SporeError` — `mycelium_spore` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 88,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "pub use deploy :: { explain_deploy , germinate , DeployError , DeployResult , DeployTarget , DeployVerification , } ;",
+      "reason": "`use deploy::explain_deploy` — `explain_deploy` is not among sibling `deploy`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2)",
+      "item_name": "co-include:DeployError,DeployTarget,DeployVerification"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 88,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "pub use deploy :: { explain_deploy , germinate , DeployError , DeployResult , DeployTarget , DeployVerification , } ;",
+      "reason": "`use deploy::germinate` — `germinate` is not among sibling `deploy`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2)",
+      "item_name": "co-include:DeployError,DeployTarget,DeployVerification"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 88,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "pub use deploy :: { explain_deploy , germinate , DeployError , DeployResult , DeployTarget , DeployVerification , } ;",
+      "reason": "`use deploy::DeployResult` — `DeployResult` is not among sibling `deploy`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2)",
+      "item_name": "co-include:DeployError,DeployTarget,DeployVerification"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 91,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "pub use guarantee_matrix :: MATRIX ;",
+      "reason": "`use guarantee_matrix::MATRIX` — `MATRIX` is not among sibling `guarantee_matrix`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 92,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "pub use recon_manifest :: { MalformedManifest , ReconManifest , ReconMode , RegrowthResult } ;",
+      "reason": "`use recon_manifest::ReconManifest` — `ReconManifest` is not among sibling `recon_manifest`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2)",
+      "item_name": "co-include:MalformedManifest"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 92,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "pub use recon_manifest :: { MalformedManifest , ReconManifest , ReconMode , RegrowthResult } ;",
+      "reason": "`use recon_manifest::ReconMode` — `ReconMode` is not among sibling `recon_manifest`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2)",
+      "item_name": "co-include:MalformedManifest"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 92,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "pub use recon_manifest :: { MalformedManifest , ReconManifest , ReconMode , RegrowthResult } ;",
+      "reason": "`use recon_manifest::RegrowthResult` — `RegrowthResult` is not among sibling `recon_manifest`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2)",
+      "item_name": "co-include:MalformedManifest"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "line": 93,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "pub use spore_ops :: { explain_spore , identity , manifest_of , verify , SporeErr , SporeUnit } ;",
+      "reason": "`use spore_ops::explain_spore` — `explain_spore` is not among sibling `spore_ops`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2); `use spore_ops::identity` — `identity` is not among sibling `spore_ops`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2); `use spore_ops::manifest_of` — `manifest_of` is not among sibling `spore_ops`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2); `use spore_ops::verify` — `verify` is not among sibling `spore_ops`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2); `use spore_ops::SporeErr` — `SporeErr` is not among sibling `spore_ops`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2); `use spore_ops::SporeUnit` — `SporeUnit` is not among sibling `spore_ops`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    }
+  ],
+  "total_top_level_items": 10
+}

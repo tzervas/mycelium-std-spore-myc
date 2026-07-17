@@ -1,0 +1,200 @@
+{
+  "files": [
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/deploy.rs",
+      "total_items": 12,
+      "non_test_items": 11,
+      "emitted": 5,
+      "gaps": 20,
+      "expressible_pct": 45.45454545454545,
+      "category_counts": {
+        "DeriveAttr": 1,
+        "DeriveSatisfied": 5,
+        "Impl": 1,
+        "Import": 2,
+        "MacroInvocation": 1,
+        "MultiStmtBody": 1,
+        "NamedFieldDrop": 5,
+        "Other": 1,
+        "PayloadVariant": 1,
+        "ReservedWord": 1,
+        "TestItem": 1
+      }
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/guarantee_matrix.rs",
+      "total_items": 4,
+      "non_test_items": 3,
+      "emitted": 0,
+      "gaps": 5,
+      "expressible_pct": 0.0,
+      "category_counts": {
+        "Other": 2,
+        "ReservedWord": 1,
+        "Struct": 1,
+        "TestItem": 1
+      }
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+      "total_items": 10,
+      "non_test_items": 6,
+      "emitted": 2,
+      "gaps": 16,
+      "expressible_pct": 33.33333333333333,
+      "category_counts": {
+        "Import": 10,
+        "InnerAttr": 1,
+        "ModuleDecl": 4,
+        "ReservedWord": 1
+      }
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/recon_manifest.rs",
+      "total_items": 14,
+      "non_test_items": 13,
+      "emitted": 1,
+      "gaps": 16,
+      "expressible_pct": 7.6923076923076925,
+      "category_counts": {
+        "DeriveSatisfied": 2,
+        "Impl": 4,
+        "Import": 5,
+        "MacroInvocation": 1,
+        "ReservedWord": 1,
+        "Struct": 2,
+        "TestItem": 1
+      }
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/spore_ops.rs",
+      "total_items": 16,
+      "non_test_items": 15,
+      "emitted": 0,
+      "gaps": 17,
+      "expressible_pct": 0.0,
+      "category_counts": {
+        "Impl": 3,
+        "Import": 4,
+        "MacroInvocation": 1,
+        "Other": 5,
+        "PayloadVariant": 1,
+        "ReservedWord": 1,
+        "Struct": 1,
+        "TestItem": 1
+      }
+    }
+  ],
+  "totals": {
+    "total_items": 56,
+    "non_test_items": 48,
+    "emitted": 8,
+    "gaps": 74,
+    "expressible_pct": 16.666666666666664,
+    "category_counts": {
+      "DeriveAttr": 1,
+      "DeriveSatisfied": 7,
+      "Impl": 8,
+      "Import": 21,
+      "InnerAttr": 1,
+      "MacroInvocation": 3,
+      "ModuleDecl": 4,
+      "MultiStmtBody": 1,
+      "NamedFieldDrop": 5,
+      "Other": 8,
+      "PayloadVariant": 2,
+      "ReservedWord": 5,
+      "Struct": 4,
+      "TestItem": 4
+    }
+  },
+  "remap": {
+    "phylum": {
+      "source_crate": "mycelium-std-spore",
+      "target_phylum": "std.spore"
+    },
+    "nodules": [
+      {
+        "target_nodule": "std.spore.deploy",
+        "operation": "Keep",
+        "sources": [
+          {
+            "rust_path": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/deploy.rs",
+            "rust_span": null,
+            "moved_items": []
+          }
+        ],
+        "rationale": "structure-preserving 1:1 (DN-109 §5.3-B v0 default: every emitted nodule keeps its source file's mod-tree position, no restructuring proposed)",
+        "safety": "Safe",
+        "api_surface_changed": false,
+        "identity_neutral": true,
+        "guarantee": "Declared"
+      },
+      {
+        "target_nodule": "std.spore.guarantee_matrix",
+        "operation": "Keep",
+        "sources": [
+          {
+            "rust_path": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/guarantee_matrix.rs",
+            "rust_span": null,
+            "moved_items": []
+          }
+        ],
+        "rationale": "structure-preserving 1:1 (DN-109 §5.3-B v0 default: every emitted nodule keeps its source file's mod-tree position, no restructuring proposed)",
+        "safety": "Safe",
+        "api_surface_changed": false,
+        "identity_neutral": true,
+        "guarantee": "Declared"
+      },
+      {
+        "target_nodule": "std.spore",
+        "operation": "Keep",
+        "sources": [
+          {
+            "rust_path": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/lib.rs",
+            "rust_span": null,
+            "moved_items": []
+          }
+        ],
+        "rationale": "structure-preserving 1:1 (DN-109 §5.3-B v0 default: every emitted nodule keeps its source file's mod-tree position, no restructuring proposed)",
+        "safety": "Safe",
+        "api_surface_changed": false,
+        "identity_neutral": true,
+        "guarantee": "Declared"
+      },
+      {
+        "target_nodule": "std.spore.recon_manifest",
+        "operation": "Keep",
+        "sources": [
+          {
+            "rust_path": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/recon_manifest.rs",
+            "rust_span": null,
+            "moved_items": []
+          }
+        ],
+        "rationale": "structure-preserving 1:1 (DN-109 §5.3-B v0 default: every emitted nodule keeps its source file's mod-tree position, no restructuring proposed)",
+        "safety": "Safe",
+        "api_surface_changed": false,
+        "identity_neutral": true,
+        "guarantee": "Declared"
+      },
+      {
+        "target_nodule": "std.spore.spore_ops",
+        "operation": "Keep",
+        "sources": [
+          {
+            "rust_path": "/root/git/isolated/mycelium/crates/mycelium-std-spore/src/spore_ops.rs",
+            "rust_span": null,
+            "moved_items": []
+          }
+        ],
+        "rationale": "structure-preserving 1:1 (DN-109 §5.3-B v0 default: every emitted nodule keeps its source file's mod-tree position, no restructuring proposed)",
+        "safety": "Safe",
+        "api_surface_changed": false,
+        "identity_neutral": true,
+        "guarantee": "Declared"
+      }
+    ],
+    "idiom_choices": []
+  }
+}

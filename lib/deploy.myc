@@ -1,0 +1,125 @@
+// nodule: std.spore_kw.deploy
+// Native deploy / germination seam — ADR-013 native path (M-620).
+//
+// Provides the `germinate` entry point that deploys a [`SporeUnit`] to a [`DeployTarget`],
+// verifying content-hash canonicality (C4 / ADR-003) and the no-opaque-lowering guarantee
+// (VR-4) end-to-end.
+//
+// # Honesty crux (G2 / VR-4 / VR-5)
+//
+// - **Never silent**: a missing or ambiguous deploy input is an explicit [`DeployError`] naming
+//   the condition — never a guessed default (G2).
+// - **VR-4 (no opaque lowering)**: the deploy path checks that no opaque lowering step exists
+//   between the input spore and the deployed unit. If one is detected, the deploy refuses with
+//   [`DeployError::OpaqueStepDetected`] naming the step.
+// - **Content-hash canonical (C4 / ADR-003)**: the deployed unit's content hash is the
+//   deterministic BLAKE3 hash of its canonical representation. A mismatch is an explicit
+//   [`DeployError::HashMismatch`].
+//
+// # Guarantee tags (VR-5 honesty rule)
+//
+// - `germinate`: `Empirical` — the VR-4 check is structural but the native deploy path is not
+//   yet proven end-to-end (the MLIR toolchain is not yet fully installed). No upgrade without a
+//   checked basis.
+// - `verify content hash canonical`: `Exact` — BLAKE3 is deterministic.
+// - `no-opaque-lowering check`: `Declared` — structural assertion; full proof requires the MLIR
+//   toolchain to be available and linked.
+// - `explain_deploy`: `Exact` — produces a deterministic string from the result.
+//
+// # EXPLAIN-able (VR-4 / SC-3)
+//
+// [`explain_deploy`] returns a human-readable string describing what was checked and the outcome.
+// The string is a pure function of the result (no randomness, no IO) and always mentions both
+// the content hash and the opaque-lowering check (VR-4 visibility).
+// @summary: best-effort transpilation via mycelium-transpile (M-873). Declared,
+// unvalidated — no Mycelium parser/typechecker confirms this output; see the
+// accompanying .gap.json for every construct this pass could not express.
+nodule std.spore_kw.deploy;
+
+// Declared: ambient Option type co-emit — oracle self-containment (G-α Rank-1 / L2-A). Type shape cites lib/std/option.myc (Some/None sum); combinators are NOT fabricated (VR-5/G2). Checker does not seed Option as prelude (unlike Bool/Unit unconditional, Vec conditional).
+type Option[A] = Some(A) | None;
+
+// Where to deploy a spore.
+//
+// This is a seam type: the v0 stub supports [`DeployTarget::InMemory`] and
+// [`DeployTarget::Local`]. Future variants (remote, WASM, MLIR native) will extend this without
+// breaking the never-silent contract — every new target must still go through `germinate` and
+// must fail closed on ambiguous / missing input.
+//
+// # Guarantee tag: `Exact` (deterministic target selection — no hidden defaults)
+// # Fallibility: target validation is the caller's responsibility; `germinate` errors on ambiguity
+// # Effects: none (the type itself has no effects; `germinate` carries the `io` effect)
+pub type DeployTarget = InMemory | Local(Bytes);
+
+impl Show[DeployTarget] for DeployTarget {
+  fn render(x: DeployTarget) => Bytes =
+    match x { InMemory => "InMemory", Local(p0) => bytes_concat(bytes_concat("Local(", render(p0)), ")") };
+};
+
+fn eq_DeployTarget(a: DeployTarget, b: DeployTarget) => Binary{1} =
+  match a { InMemory => match b { InMemory => 0b1, _ => 0b0 }, Local(p0) => match b { Local(q0) => bytes_eq(p0, q0), _ => 0b0 } };
+
+// What was verified during a successful deploy (VR-4 / C4 / ADR-003).
+//
+// Carried inside [`DeployResult::Deployed`] to give callers an inspectable, EXPLAIN-able record
+// of which invariants were checked. Both fields must be `true` for a deploy to succeed — a false
+// value is an internal logic error (the `germinate` function refuses before returning `Deployed`).
+//
+// # Honesty note
+//
+// The `no_opaque_lowering` field is `Declared` strength: it is a structural assertion (no opaque
+// lowering step present in the pipeline), not a proof. The MLIR toolchain verification is
+// out-of-scope until the native toolchain is integrated.
+pub type DeployVerification = DeployVerification(Bool, Bool);
+
+impl Show[DeployVerification] for DeployVerification {
+  fn render(x: DeployVerification) => Bytes =
+    match x { DeployVerification(p0, p1) => bytes_concat(bytes_concat(bytes_concat(bytes_concat("DeployVerification(", render(p0)), ", "), render(p1)), ")") };
+};
+
+fn eq_DeployVerification(a: DeployVerification, b: DeployVerification) => Binary{1} =
+    match a { DeployVerification(p0, p1) => match b { DeployVerification(q0, q1) => and(match p0 { True => match q0 { True => 0b1, False => 0b0 }, False => match q0 { True => 0b0, False => 0b1 } }, match p1 { True => match q1 { True => 0b1, False => 0b0 }, False => match q1 { True => 0b0, False => 0b1 } }) } };
+
+// An explicit deploy error — never a silent fallback (G2 / VR-4 / VR-5).
+//
+// Each variant names the exact condition that triggered it. The conditions are mutually
+// exclusive in the v0 stub; `germinate` checks them in order: MissingInput → AmbiguousInput →
+// HashMismatch → OpaqueStepDetected → success.
+//
+// # Condition triggers (exact — never guessed or silently recovered)
+//
+// - [`MissingInput`](DeployError::MissingInput): required input absent (e.g. empty path for
+//   `Local` target, or a target-required field is `None`).
+// - [`AmbiguousInput`](DeployError::AmbiguousInput): more than one candidate matches; the caller
+//   must disambiguate. All candidates are listed so the caller can surface them (G11).
+// - [`HashMismatch`](DeployError::HashMismatch): the declared spore identity did not match the
+//   recomputed hash at deploy time (C4 / ADR-003 violation). Both hashes are carried.
+// - [`OpaqueStepDetected`](DeployError::OpaqueStepDetected): an opaque lowering step was
+//   detected in the native deploy pipeline (VR-4 violation). The step name is carried.
+pub type DeployError = MissingInput | AmbiguousInput(Vec[Bytes]) | HashMismatch(Bytes, Bytes) | OpaqueStepDetected(Bytes);
+
+fn show_vec_Bytes(xs: Vec[Bytes]) => Bytes =
+  match xs { Nil => "Nil", Cons(h, t) => bytes_concat("Cons(", bytes_concat(render(h), bytes_concat(", ", bytes_concat(show_vec_Bytes(t), ")")))) };
+
+impl Show[DeployError] for DeployError {
+  fn render(x: DeployError) => Bytes =
+    match x { MissingInput => "MissingInput", AmbiguousInput(p0) => bytes_concat(bytes_concat("AmbiguousInput(", show_vec_Bytes(p0)), ")"), HashMismatch(p0, p1) => bytes_concat(bytes_concat(bytes_concat(bytes_concat("HashMismatch(", render(p0)), ", "), render(p1)), ")"), OpaqueStepDetected(p0) => bytes_concat(bytes_concat("OpaqueStepDetected(", render(p0)), ")") };
+};
+
+fn eq_vec_Bytes(a: Vec[Bytes], b: Vec[Bytes]) => Binary{1} =
+  match a { Nil => match b { Nil => 0b1, Cons(_, _) => 0b0 }, Cons(ha, ta) => match b { Nil => 0b0, Cons(hb, tb) => and(bytes_eq(ha, hb), eq_vec_Bytes(ta, tb)) } };
+
+fn eq_DeployError(a: DeployError, b: DeployError) => Binary{1} =
+  match a { MissingInput => match b { MissingInput => 0b1, _ => 0b0 }, AmbiguousInput(p0) => match b { AmbiguousInput(q0) => eq_vec_Bytes(p0, q0), _ => 0b0 }, HashMismatch(p0, p1) => match b { HashMismatch(q0, q1) => and(bytes_eq(p0, q0), bytes_eq(p1, q1)), _ => 0b0 }, OpaqueStepDetected(p0) => match b { OpaqueStepDetected(q0) => bytes_eq(p0, q0), _ => 0b0 } };
+
+// Detect an opaque lowering step in the deploy pipeline for the given target.
+//
+// In the v0 stub, the clean pipeline (pack → hash → deploy) contains no opaque steps. This
+// function is the hook for future MLIR toolchain integration: when the native pipeline is wired
+// up, it will inspect the step trace and return the first opaque step name found, or `None` if
+// the pipeline is transparent end-to-end (VR-4).
+//
+// # Guarantee tag: `Declared` (structural assertion; full proof requires the MLIR toolchain)
+// # Fallibility: returns `None` when no opaque step is found (never panics)
+// # Effects: none (pure)
+fn detect_opaque_step(target: DeployTarget) => Option[Bytes] = match target { InMemory | Local(_) => None };

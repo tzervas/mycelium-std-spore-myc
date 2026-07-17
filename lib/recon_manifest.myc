@@ -1,0 +1,40 @@
+// nodule: std.spore_kw.recon_manifest
+// Reconstruction manifest types and operations (RFC-0003 §6; spec §3/§4).
+//
+// A `ReconManifest` is the inspectable record `{ mode, model, dim, codebooks (content-addressed),
+// recipe?, decode, bound }`. It is authored/validated here; the actual reconstruction compute is
+// `std.vsa`'s. `spore` packages and validates; `vsa` executes (spec §2 boundary / §7 Q4).
+//
+// # Honesty guarantee (FR-C2 / VR-5)
+//
+// The **reconstruction honesty ceiling** is enforced in [`ReconManifest::validate`]:
+// a manifest whose decode procedure is `Resonator` **must not** have a bound basis stronger than
+// `Empirical`. Any attempt to author an over-strength resonator manifest returns
+// `Err(MalformedManifest::ResonatorOverStrength)`. `spore` carries the tag `std.vsa` establishes;
+// it does not set or upgrade it (VR-5). The ceiling is checked at the `ReconInfo` layer in the
+// kernel (`mycelium-core::recon`) and re-surfaced here for the ergonomic stdlib API.
+//
+// # Regrowth result (FLAG Q4a — RESOLVED)
+//
+// [`RegrowthResult`] carries the `Factorization` from `std.vsa` together with the manifest's full
+// certificate `Bound`, and projects to the stdlib's honest carrier via
+// [`RegrowthResult::as_approx`] → `std.numerics::Approx<Factorization>` (strength derived from the
+// bound's basis, never upgraded — VR-5).
+// @summary: best-effort transpilation via mycelium-transpile (M-873). Declared,
+// unvalidated — no Mycelium parser/typechecker confirms this output; see the
+// accompanying .gap.json for every construct this pass could not express.
+nodule std.spore_kw.recon_manifest;
+
+// A refusal from manifest validation — explicitly named, never silent (C1/G2).
+//
+// Each variant names the violated invariant so callers can surface the specific rule
+// violation (G11 dual projection — the error is both the refusal *and* the diagnostic).
+pub type MalformedManifest = ResonatorOverStrength | KernelWf;
+
+impl Show[MalformedManifest] for MalformedManifest {
+  fn render(x: MalformedManifest) => Bytes =
+    match x { ResonatorOverStrength => "ResonatorOverStrength", KernelWf => "KernelWf" };
+};
+
+fn eq_MalformedManifest(a: MalformedManifest, b: MalformedManifest) => Binary{1} =
+  match a { ResonatorOverStrength => match b { ResonatorOverStrength => 0b1, _ => 0b0 }, KernelWf => match b { KernelWf => 0b1, _ => 0b0 } };

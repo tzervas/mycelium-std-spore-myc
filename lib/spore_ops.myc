@@ -1,0 +1,26 @@
+// nodule: std.spore_kw.spore_ops
+// Spore packaging and verification operations — the library face of the M-368 pipeline.
+//
+// Provides [`SporeUnit`] (the `std.spore` value handle wrapping a built [`mycelium_spore::Spore`]),
+// the packaging operations `spore_from_project` / `spore_from_value`, and the verify / explain /
+// identity / manifest_of surface from spec §3.
+//
+// # Honesty crux (C4 / ADR-003)
+//
+// A spore's identity IS its canonical content hash. Metadata (`name`, `version`, `authors`) is
+// carried with the spore but NEVER defines it. Two builds of the same code + deps yield the
+// SAME spore hash regardless of version label. A content change ALWAYS changes the hash.
+// Enforced by `mycelium-spore::build_spore` (the M-368 contract; tested in that crate and
+// cross-checked here).
+//
+// # Never-silent (C1 / G2)
+//
+// Every missing/ambiguous publish input is a typed `Err` naming the offending input. A hash
+// mismatch on verify is `Err(SporeErr::HashMismatch{expected, found})`. No partial artifact
+// is ever written.
+// @summary: best-effort transpilation via mycelium-transpile (M-873). Declared,
+// unvalidated — no Mycelium parser/typechecker confirms this output; see the
+// accompanying .gap.json for every construct this pass could not express.
+nodule std.spore_kw.spore_ops;
+
+

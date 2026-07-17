@@ -1,0 +1,34 @@
+// nodule: std.spore_kw.guarantee_matrix
+// The `std.spore` guarantee matrix — RFC-0016 §4.5 / spec §4.
+//
+// Encodes the per-op guarantee tags from the **normative spec §4 table** as **checked data**,
+// not prose only (C2 / VR-5). Tests assert coverage and tag correctness, mirroring the table
+// in `docs/spec/stdlib/spore.md §4.5`.
+//
+// # Tag legend (VR-5 / RFC-0016 C2)
+//
+// - **`Exact`** — deterministic, no accuracy semantics. A content hash is a pure function of
+//   normalized structure (RFC-0001 §4.6). Build / identity / manifest-authoring rows are `Exact`.
+// - **`Empirical` (≤ ceiling)** — the reconstruction row inherits the tag `std.vsa` establishes
+//   for the probabilistic resonator decode (FR-C2). `spore` carries, never sets, this tag.
+// - **`Exact` (via verification)** — the deploy row verifies the deterministic hash at the target;
+//   the row's `Exact` is the *verification*'s tag. Implemented in M-620 (`deploy.rs`).
+// - **`Declared`** — structural assertion; full proof requires external toolchain (e.g. MLIR).
+//
+// # Fallibility (C1 / G2)
+//
+// Every `PublishErr`-fallible row names the specific offending input (surfaceless phylum, hashless
+// dep, version/hash disagreement, bad include, cycle, no sources). No row permits a silent drop
+// of an error. The `deploy` / `germinate` rows enumerate all named error variants (C1/G2).
+//
+// # EXPLAIN-able? (C3 / G11)
+//
+// An EXPLAIN artifact exists for every selecting/converting/approximating op. The `identity` hash
+// itself is the receipt. The `manifest_of` record is the inspectable artifact. A publish/deploy
+// refusal carries a diagnostic naming the offending input.
+// @summary: best-effort transpilation via mycelium-transpile (M-873). Declared,
+// unvalidated — no Mycelium parser/typechecker confirms this output; see the
+// accompanying .gap.json for every construct this pass could not express.
+nodule std.spore_kw.guarantee_matrix;
+
+
